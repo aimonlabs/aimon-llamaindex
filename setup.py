@@ -10,8 +10,8 @@ setup(
     packages=find_packages(),
     version="0.0.1",
     install_requires=[
-        "aimon",
-        "llama-index",
+        "aimon==0.8.1",
+        "llama-index==0.12.6",
     ],
     author='AIMon',
     author_email='info@aimon.ai',
