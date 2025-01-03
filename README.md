@@ -8,3 +8,4 @@ To install the AIMon LlamaIndex package, use pip:
 
 ```bash
 pip install aimon-llamaindex
+```
