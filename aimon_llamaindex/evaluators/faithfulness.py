@@ -25,14 +25,16 @@ class FaithfulnessEvaluator(AIMonEvaluator):
         detect_response = self.detect_aimon_response(aimon_payload)
 
         # Create evaluation result        
-        evaluation_result = EvaluationResult()
-        evaluation_result.score = detect_response.hallucination['score'] 
-        evaluation_result.passing = bool(detect_response.hallucination['is_hallucinated'])
+        # evaluation_result = EvaluationResult()
+        # evaluation_result.score = detect_response.hallucination['score'] 
+        # evaluation_result.passing = bool(detect_response.hallucination['is_hallucinated'])
 
-        if evaluation_result.passing == True:
-            evaluation_result.feedback = "The LLM response is not hallucinated."
-        else:
-            evaluation_result.feedback = "The LLM response is hallucinated."
+        # if evaluation_result.passing == True:
+        #     evaluation_result.feedback = "The LLM response is not hallucinated."
+        # else:
+        #     evaluation_result.feedback = "The LLM response is hallucinated."
 
-        return evaluation_result
+        # return evaluation_result
+
+        return detect_response.hallucination
     
