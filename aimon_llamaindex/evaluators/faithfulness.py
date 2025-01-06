@@ -1,6 +1,7 @@
 from typing import Any                                              
 from aimon import Client
 from .aimon_evaluator import AIMonEvaluator
+from llama_index.core.evaluation import EvaluationResult
 
 class FaithfulnessEvaluator(AIMonEvaluator):
     
