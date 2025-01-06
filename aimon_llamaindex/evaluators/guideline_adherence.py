@@ -1,8 +1,8 @@
-from typing import Any
-from aimon import Client                                          
+from typing import Any              
+from aimon import Client
 from .aimon_evaluator import AIMonEvaluator
 
-class ConcisenessEvaluator(AIMonEvaluator):
+class GuidelineEvaluator(AIMonEvaluator):
     
     def __init__(self, aimon_client:Client, publish: bool = False, application_name:str = "ApplicationName", model_name:str = "ModelName") -> None:                  
         super().__init__(aimon_client, publish, application_name, model_name)
@@ -10,8 +10,8 @@ class ConcisenessEvaluator(AIMonEvaluator):
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
         
         aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text)
-
-        aimon_payload['config'] = {'conciseness': {'detector_name': 'default'}}
+        
+        aimon_payload['config'] = {'instruction_adherence': {'detector_name': 'default'}}
         
         return aimon_payload
 
@@ -23,4 +23,4 @@ class ConcisenessEvaluator(AIMonEvaluator):
     
         detect_response = self.detect_aimon_response(aimon_payload)
 
-        return detect_response.conciseness
+        return detect_response.instruction_adherence

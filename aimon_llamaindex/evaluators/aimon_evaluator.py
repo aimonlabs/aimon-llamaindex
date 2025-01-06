@@ -1,13 +1,16 @@
 import logging
 from aimon import Client
+from typing import Any                                              
 
 class AIMonEvaluator:
 
     ## Constructor of the Base Class
-    def __init__(self, aimon_client:Client, publish: bool = False) -> None:
+    def __init__(self, aimon_client:Client, publish: bool = False, application_name:str = "ApplicationName", model_name:str = "ModelName") -> None:
  
         self.publish = publish
         self.client = aimon_client
+        self.model_name = model_name
+        self.application_name = application_name
 
     ## AIMon payload creation
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
@@ -30,8 +33,8 @@ class AIMonEvaluator:
                                 }
 
         if self.publish:
-            aimon_payload['application_name'] = "Default Application Name"
-            aimon_payload['model_name'] = "Default Model Name"
+            aimon_payload['model_name'] = self.model_name
+            aimon_payload['application_name'] = self.application_name
 
         return aimon_payload
     
@@ -79,3 +82,16 @@ class AIMonEvaluator:
 
         context, relevance_scores = get_source_docs(llm_response)
         return context, llm_response.response
+    
+    ## Function to evaluate the LLM response
+
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs:Any):
+        
+        context, response = self.extract_response_metadata(llamaindex_llm_response)
+
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response)
+    
+        evaluation_result = self.detect_aimon_response(aimon_payload)
+
+        return evaluation_result
+    

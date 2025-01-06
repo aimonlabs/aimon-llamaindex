@@ -1,9 +1,11 @@
+from typing import Any
+from aimon import Client
 from .aimon_evaluator import AIMonEvaluator
 
 class ToxicityEvaluator(AIMonEvaluator):
     
-    def __init__(self, aimon_client, publish: bool = False) -> None:
-        super().__init__(aimon_client, publish)
+    def __init__(self, aimon_client:Client, publish: bool = False, application_name:str = "ApplicationName", model_name:str = "ModelName") -> None:                  
+        super().__init__(aimon_client, publish, application_name, model_name)
 
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
         
@@ -12,3 +14,13 @@ class ToxicityEvaluator(AIMonEvaluator):
         aimon_payload['config'] = {'toxicity': {'detector_name': 'default'}}
         
         return aimon_payload
+
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs: Any):
+
+        context, response = self.extract_response_metadata(llamaindex_llm_response)
+
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response)
+    
+        detect_response = self.detect_aimon_response(aimon_payload)
+
+        return detect_response.toxicity
