@@ -1,16 +1,36 @@
+import os
+import random
+import string
 import logging
 from aimon import Client
 from typing import Any                                              
 
+def generate_random_string(length):
+  """Generates a random string of letters and digits."""
+  characters = string.ascii_letters + string.digits
+  return ''.join(random.choice(characters) for i in range(length))
+
 class AIMonEvaluator:
 
     ## Constructor of the Base Class
-    def __init__(self, aimon_client:Client, publish: bool = False, application_name:str = "ApplicationName", model_name:str = "ModelName") -> None:
+    def __init__(self, 
+                 aimon_client:Client, 
+                 publish: bool = False, 
+                 application_name:str = "ApplicationName"+generate_random_string(5), 
+                 model_name:str = "ModelName"+generate_random_string(5),
+                 detector_configuration:dict[str, dict[str, str]] = {   'hallucination': {'detector_name': 'default'},
+                                                                        'conciseness': {'detector_name': 'default'},
+                                                                        'completeness': {'detector_name': 'default'},
+                                                                        'instruction_adherence': {'detector_name': 'default'},
+                                                                        'toxicity': {'detector_name': 'default'},
+                                                                    }
+                ) -> None:
  
         self.publish = publish
         self.client = aimon_client
         self.model_name = model_name
         self.application_name = application_name
+        self.detector_configuration = detector_configuration
 
     ## AIMon payload creation
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
@@ -24,13 +44,8 @@ class AIMonEvaluator:
 
         aimon_payload['publish'] = self.publish
 
-        ## Default configuration for all evaluators
-        aimon_payload['config'] = { 'hallucination': {'detector_name': 'default'},
-                                    'conciseness': {'detector_name': 'default'},
-                                    'completeness': {'detector_name': 'default'},
-                                    'instruction_adherence': {'detector_name': 'default'},
-                                    'toxicity': {'detector_name': 'default'},
-                                }
+        ## Set configuration for all evaluators. By default it sets detectors to hallucination, conciseness, completeness, instrucion_adherence and toxicity
+        aimon_payload['config'] = self.detector_configuration
 
         if self.publish:
             aimon_payload['model_name'] = self.model_name

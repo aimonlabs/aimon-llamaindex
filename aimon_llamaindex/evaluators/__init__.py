@@ -1,5 +1,5 @@
 from .aimon_evaluator import AIMonEvaluator
-from .faithfulness import FaithfulnessEvaluator
+from .hallucination import HallucinationEvaluator
 from .conciseness import ConcisenessEvaluator
 from .completeness import CompletenessEvaluator
 from .guideline_adherence import GuidelineEvaluator
@@ -7,7 +7,7 @@ from .toxicity import ToxicityEvaluator
 
 __all__ = [
     'AIMonEvaluator',
-    'FaithfulnessEvaluator',
+    'HallucinationEvaluator',
     'ConcisenessEvaluator',
     'CompletenessEvaluator',
     'GuidelineEvaluator',
