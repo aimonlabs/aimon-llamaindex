@@ -1,6 +1,5 @@
 from typing import Any                                              
 from aimon import Client
-from llama_index.core.evaluation import EvaluationResult
 from .aimon_evaluator import AIMonEvaluator, generate_random_string
 
 class HallucinationEvaluator(AIMonEvaluator):
@@ -24,22 +23,9 @@ class HallucinationEvaluator(AIMonEvaluator):
 
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        ## Using the overridden create_payload method
         aimon_payload = self.create_payload(context, user_query, user_instructions, response)
     
         detect_response = self.detect_aimon_response(aimon_payload)
-
-        # Create evaluation result        
-        # evaluation_result = EvaluationResult()
-        # evaluation_result.score = detect_response.hallucination['score'] 
-        # evaluation_result.passing = bool(detect_response.hallucination['is_hallucinated'])
-
-        # if evaluation_result.passing == True:
-        #     evaluation_result.feedback = "The LLM response is not hallucinated."
-        # else:
-        #     evaluation_result.feedback = "The LLM response is hallucinated."
-
-        # return evaluation_result
 
         return detect_response.hallucination
     
