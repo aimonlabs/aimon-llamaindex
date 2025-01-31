@@ -23,6 +23,7 @@ class AIMonEvaluator:
                                                                         'completeness': {'detector_name': 'default'},
                                                                         'instruction_adherence': {'detector_name': 'default'},
                                                                         'toxicity': {'detector_name': 'default'},
+                                                                        'retrieval_relevance': {'detector_name': 'default'}
                                                                     }
                 ) -> None:
  
