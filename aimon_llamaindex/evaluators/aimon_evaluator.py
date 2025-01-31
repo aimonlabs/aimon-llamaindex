@@ -110,7 +110,7 @@ class AIMonEvaluator:
     
     ## Function to evaluate the LLM response
 
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition, **kwargs:Any):
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition = None, **kwargs:Any):
         
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
