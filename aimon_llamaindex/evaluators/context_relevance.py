@@ -14,12 +14,8 @@ class ContextRelevanceEvaluator(AIMonEvaluator):
 
     def create_payload(self, context, user_query, user_instructions, generated_text, task_definition) -> dict:
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text)
-        
-        aimon_payload['config'] = {'retrieval_relevance': {'detector_name': 'default'}}
-
-        aimon_payload['task_definition'] = task_definition
-        
+        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'retrieval_relevance': {'detector_name': 'default'}}, task_definition = task_definition)
+                
         return aimon_payload
     
     def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition, **kwargs: Any):
