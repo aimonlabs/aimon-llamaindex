@@ -34,7 +34,7 @@ class AIMonEvaluator:
         self.detector_configuration = detector_configuration
 
     ## AIMon payload creation
-    def create_payload(self, context, user_query, user_instructions, generated_text, config=None, **kwargs) -> dict:
+    def create_payload(self, context, user_query, user_instructions, generated_text, config, **kwargs) -> dict:
         
         task_definition = kwargs.get('task_definition', None)
 
@@ -43,12 +43,10 @@ class AIMonEvaluator:
             'user_query': user_query,
             'generated_text': generated_text,
             'instructions': user_instructions,
+            'config': config
         }
 
         aimon_payload['publish'] = self.publish
-
-        ## Set configuration
-        aimon_payload['config'] = config if config is not None else self.detector_configuration
 
         if 'retrieval_relevance' in aimon_payload['config']:
             if task_definition == None:
@@ -114,7 +112,7 @@ class AIMonEvaluator:
         
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        aimon_payload = self.create_payload(context, user_query, user_instructions, response, config=None, task_definition = task_definition)
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response, config=self.detector_configuration, task_definition = task_definition)
     
         evaluation_result = self.detect_aimon_response(aimon_payload)
 
