@@ -110,13 +110,11 @@ class AIMonEvaluator:
     
     ## Function to evaluate the LLM response
 
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs:Any):
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition, **kwargs:Any):
         
-        task_definition = kwargs.get('task_definition', None)
-
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        aimon_payload = self.create_payload(context, user_query, user_instructions, response, task_definition)
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response, task_definition = task_definition)
     
         evaluation_result = self.detect_aimon_response(aimon_payload)
 
