@@ -14,8 +14,7 @@ class HallucinationEvaluator(AIMonEvaluator):
 
     def create_payload(self, context, user_query, user_instructions, generated_text):
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text)
-        aimon_payload['config'] = { 'hallucination': {'detector_name': 'default'},}
+        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'hallucination': {'detector_name': 'default'}})
 
         return aimon_payload
     

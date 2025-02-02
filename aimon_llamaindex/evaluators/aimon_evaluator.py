@@ -23,6 +23,7 @@ class AIMonEvaluator:
                                                                         'completeness': {'detector_name': 'default'},
                                                                         'instruction_adherence': {'detector_name': 'default'},
                                                                         'toxicity': {'detector_name': 'default'},
+                                                                        'retrieval_relevance': {'detector_name': 'default'}
                                                                     }
                 ) -> None:
  
@@ -33,19 +34,26 @@ class AIMonEvaluator:
         self.detector_configuration = detector_configuration
 
     ## AIMon payload creation
-    def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
+    def create_payload(self, context, user_query, user_instructions, generated_text, config, **kwargs) -> dict:
+        
+        task_definition = kwargs.get('task_definition', None)
 
         aimon_payload = {
             'context': context,
             'user_query': user_query,
             'generated_text': generated_text,
             'instructions': user_instructions,
+            'config': config
         }
 
         aimon_payload['publish'] = self.publish
 
-        ## Set configuration for all evaluators. By default it sets detectors to hallucination, conciseness, completeness, instrucion_adherence and toxicity
-        aimon_payload['config'] = self.detector_configuration
+        if 'retrieval_relevance' in aimon_payload['config']:
+            if task_definition == None:
+                raise ValueError(   "When retrieval_relevance is specified in the config, "
+                                    "'task_definition' must be present and should not be None.")
+            else:
+                aimon_payload['task_definition'] = task_definition
 
         if self.publish:
             aimon_payload['model_name'] = self.model_name
@@ -100,11 +108,11 @@ class AIMonEvaluator:
     
     ## Function to evaluate the LLM response
 
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs:Any):
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition = None, **kwargs:Any):
         
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        aimon_payload = self.create_payload(context, user_query, user_instructions, response)
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response, config=self.detector_configuration, task_definition = task_definition)
     
         evaluation_result = self.detect_aimon_response(aimon_payload)
 

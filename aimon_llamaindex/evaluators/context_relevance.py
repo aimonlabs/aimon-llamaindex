@@ -2,7 +2,7 @@ from typing import Any
 from aimon import Client                                        
 from .aimon_evaluator import AIMonEvaluator, generate_random_string
 
-class CompletenessEvaluator(AIMonEvaluator):
+class ContextRelevanceEvaluator(AIMonEvaluator):
     
     def __init__(self, 
                  aimon_client:Client, 
@@ -12,18 +12,18 @@ class CompletenessEvaluator(AIMonEvaluator):
         
         super().__init__(aimon_client, publish, application_name, model_name)
 
-    def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
+    def create_payload(self, context, user_query, user_instructions, generated_text, task_definition) -> dict:
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'completeness': {'detector_name': 'default'}})
+        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'retrieval_relevance': {'detector_name': 'default'}}, task_definition = task_definition)
                 
         return aimon_payload
     
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs: Any):
+    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition, **kwargs: Any):
 
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        aimon_payload = self.create_payload(context, user_query, user_instructions, response)
+        aimon_payload = self.create_payload(context, user_query, user_instructions, response, task_definition)
     
         detect_response = self.detect_aimon_response(aimon_payload)
 
-        return detect_response.completeness
+        return detect_response.retrieval_relevance

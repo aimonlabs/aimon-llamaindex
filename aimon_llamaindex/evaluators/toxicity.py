@@ -14,10 +14,8 @@ class ToxicityEvaluator(AIMonEvaluator):
 
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text)
-        
-        aimon_payload['config'] = {'toxicity': {'detector_name': 'default'}}
-        
+        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'toxicity': {'detector_name': 'default'}})
+                
         return aimon_payload
 
     def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs: Any):
