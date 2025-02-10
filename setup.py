@@ -11,7 +11,7 @@ setup(
     version="0.0.6",
     install_requires=[
         "aimon==0.9.0",
-        "llama-index==0.12.12",
+        "llama-index-core==0.12.15",
     ],
     author='AIMon',
     author_email='info@aimon.ai',
