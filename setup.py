@@ -8,9 +8,9 @@ setup(
     name='aimon-llamaindex',
     python_requires='>3.8.0',
     packages=find_packages(),
-    version="0.0.7",
+    version="0.0.8",
     install_requires=[
-        "aimon==0.9.0",
+        "aimon==0.9.2",
         "llama-index-core==0.12.17",
     ],
     author='AIMon',
