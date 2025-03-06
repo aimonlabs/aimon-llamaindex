@@ -116,5 +116,10 @@ class AIMonEvaluator:
     
         evaluation_result = self.detect_aimon_response(aimon_payload)
 
+        if hasattr(evaluation_result, "retrieval_relevance") and isinstance(evaluation_result.retrieval_relevance, list):
+            for item in evaluation_result.retrieval_relevance:
+                if "relevance_scores" in item:
+                    item["relevance_scores"] = [score / 100 for score in item["relevance_scores"]]
+
         return evaluation_result
     

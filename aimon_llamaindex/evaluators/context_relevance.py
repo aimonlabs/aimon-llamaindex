@@ -26,4 +26,9 @@ class ContextRelevanceEvaluator(AIMonEvaluator):
     
         detect_response = self.detect_aimon_response(aimon_payload)
 
+        ## Normalizing relevance scores for the ContextRelevanceEvaluator
+        for item in detect_response.retrieval_relevance:
+            if "relevance_scores" in item:
+                item["relevance_scores"] = [score / 100 for score in item["relevance_scores"]]
+
         return detect_response.retrieval_relevance
