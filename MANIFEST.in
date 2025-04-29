@@ -1,0 +1,15 @@
+include README.md
+
+# Exclude development and CI/CD related directories
+exclude .gitignore
+exclude .gitattributes
+exclude .github/*
+exclude examples/*
+recursive-exclude tests *
+recursive-exclude docs *
+exclude aimon_llamaindex/test_evaluators.py
+
+# Exclude IDE config
+exclude .vscode/*
+exclude *.pyc
+exclude __pycache__/*

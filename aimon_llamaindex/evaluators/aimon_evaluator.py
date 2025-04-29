@@ -42,9 +42,11 @@ class AIMonEvaluator:
             'context': context,
             'user_query': user_query,
             'generated_text': generated_text,
-            'instructions': user_instructions,
             'config': config
         }
+
+        if user_instructions and "instruction_adherence" in (config or {}):
+            aimon_payload["instructions"] = user_instructions
 
         aimon_payload['publish'] = self.publish
 
@@ -108,8 +110,8 @@ class AIMonEvaluator:
     
     ## Function to evaluate the LLM response
 
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, task_definition = None, **kwargs:Any):
-        
+    def evaluate(self, user_query, llamaindex_llm_response, user_instructions, task_definition = None, **kwargs:Any):
+    
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
         aimon_payload = self.create_payload(context, user_query, user_instructions, response, config=self.detector_configuration, task_definition = task_definition)

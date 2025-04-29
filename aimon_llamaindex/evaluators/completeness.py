@@ -12,17 +12,21 @@ class CompletenessEvaluator(AIMonEvaluator):
         
         super().__init__(aimon_client, publish, application_name, model_name)
 
-    def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
+    def create_payload(self, context, user_query, generated_text) -> dict:
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'completeness': {'detector_name': 'default'}})
+        aimon_payload = super().create_payload(context, 
+                                               user_query, 
+                                               user_instructions=None, 
+                                               generated_text=generated_text, 
+                                               config={'completeness': {'detector_name': 'default'}})
                 
         return aimon_payload
     
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs: Any):
+    def evaluate(self, user_query, llamaindex_llm_response, **kwargs: Any):
 
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 
-        aimon_payload = self.create_payload(context, user_query, user_instructions, response)
+        aimon_payload = self.create_payload(context, user_query, response)
     
         detect_response = self.detect_aimon_response(aimon_payload)
 

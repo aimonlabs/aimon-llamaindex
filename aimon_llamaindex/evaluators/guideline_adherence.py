@@ -14,11 +14,15 @@ class GuidelineEvaluator(AIMonEvaluator):
 
     def create_payload(self, context, user_query, user_instructions, generated_text) -> dict:
         
-        aimon_payload = super().create_payload(context, user_query, user_instructions, generated_text, config={'instruction_adherence': {'detector_name': 'default'}})
+        aimon_payload = super().create_payload(context, 
+                                               user_query, 
+                                               user_instructions, 
+                                               generated_text, 
+                                               config={'instruction_adherence': {'detector_name': 'default'}})
         
         return aimon_payload
 
-    def evaluate(self, user_query, user_instructions, llamaindex_llm_response, **kwargs: Any):
+    def evaluate(self, user_query, llamaindex_llm_response, user_instructions, **kwargs: Any):
 
         context, response = self.extract_response_metadata(llamaindex_llm_response)
 

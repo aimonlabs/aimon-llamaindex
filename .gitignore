@@ -1,2 +1,4 @@
 venv
-aimon_llamaindex/evaluators/test.py
+__pycache__
+/index_storage
+instructions.txt
